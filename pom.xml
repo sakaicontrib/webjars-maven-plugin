@@ -9,11 +9,39 @@
   <description>This plugin unpacks Web resources from JARs. It was originally part of the
   http://github.com/CoreMedia/jangaroo-tools but was forked off to add support for copying
   in artifacts that aren't in the local repository.</description>
+  <url>https://github.com/sakaiproject/webjars-maven-plugin</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.version>2.2.1</maven.version>
   </properties>
+  <scm>
+    <connection>scm:git:git://github.com/sakaiproject/webjars-maven-plugin.get</connection>
+    <developerConnection>scm:git:git@github.com:sakaiproject/webjars-maven-plugin.git</developerConnection>
+    <url>https://github.com/sakaiproject/webjars-maven-plugin</url>
+    <tag>HEAD</tag>
+  </scm>
+  <developers>
+    <developer>
+      <id>buckett</id>
+      <name>Matthew Buckett</name>
+      <email>matthew.buckett@it.ox.ac.uk</email>
+      <organization>IT Services, University of Oxford</organization>
+      <organizationUrl>http://www.it.ox.ac.uk</organizationUrl>
+    </developer>
+    <developer>
+      <id>fwienber</id>
+      <name>Frank Wienberg</name>
+      <email>frank@jangaroo.net</email>
+      <organization>CoreMedia AG</organization>
+      <organizationUrl>http://www.coremedia.com/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -92,7 +120,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -101,6 +128,19 @@
           <source>1.8</source>
           <target>1.8</target>
           <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <!-- We don't need to include the project name in the tag -->
+          <tagNameFormat>@{project.version}</tagNameFormat>
+          <goals>deploy</goals>
         </configuration>
       </plugin>
     </plugins>
@@ -129,5 +169,68 @@
       </plugin>
     </plugins>
   </reporting>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.2.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.9.1</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- This is needed so that the maven plugin annotations don't break JavaDoc -->
+              <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
 
