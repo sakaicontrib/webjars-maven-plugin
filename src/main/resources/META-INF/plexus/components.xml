@@ -11,5 +11,12 @@
       <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
 
+    <component>
+      <role>org.codehaus.plexus.archiver.Archiver</role>
+      <role-hint>dir3</role-hint>
+      <implementation>net.jangaroo.webjars.mvnplugin.util.DirectoryUnArchiver</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+    </component>
+
   </components>
 </component-set>

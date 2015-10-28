@@ -49,12 +49,26 @@ public class UnpackJarResourcesMojo extends AbstractMojo {
   private UnArchiver unarchiver;
 
   /**
+   * Plexus archiver.
+   *
+   * @component role="org.codehaus.plexus.archiver.Archiver" role-hint="dir3"
+   * @required
+   */
+  @SuppressWarnings("UnusedDeclaration")
+  private UnArchiver dirUnArchiver;
+
+  /**
    * @parameter expression="${project.build.directory}/${project.build.finalName}"
    */
   private File webappDirectory;
   
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
+    unarchiver.setOverwrite(false);
+    unarchiver.setFileSelectors(new FileSelector[]{new MetaInfResourcesFileSelector()});
+
+    dirUnArchiver.setOverwrite(false);
+    dirUnArchiver.setFileSelectors(new FileSelector[]{new MetaInfResourcesFileSelector()});
     try {
       unpack(webappDirectory);
     }
@@ -66,15 +80,21 @@ public class UnpackJarResourcesMojo extends AbstractMojo {
   public void unpack(File target)
       throws ArchiverException {
 
-    unarchiver.setOverwrite(false);
-    unarchiver.setFileSelectors(new FileSelector[]{new MetaInfResourcesFileSelector()});
     Set<Artifact> dependencies = getArtifacts();
 
     for (Artifact dependency : dependencies) {
       getLog().debug("Dependency: " + dependency);
       if (!dependency.isOptional() && "jar".equals(dependency.getType())) {
-        unpack(unarchiver, dependency, target);
+          unpack(dependency, target);
       }
+    }
+  }
+
+  public void unpack(Artifact artifact, File target) throws ArchiverException {
+    if (artifact.getFile().isDirectory()) {
+      unpack(dirUnArchiver, artifact, target);
+    } else {
+      unpack(unarchiver, artifact, target);
     }
   }
 
@@ -90,7 +110,7 @@ public class UnpackJarResourcesMojo extends AbstractMojo {
     try {
       unarchiver.extract();
     } catch (Exception e) {
-      throw new ArchiverException("Failed to extract WebJar artifact to " + target, e);
+      throw new ArchiverException("Failed to extract WebJar artifact "+ artifact.getFile()+ " to " + target, e);
     }
   }
 
