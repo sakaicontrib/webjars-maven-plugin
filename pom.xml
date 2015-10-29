@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.sakaiproject.maven.plugins</groupId>
   <artifactId>webjars-maven-plugin</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>WebJars Maven Plugin</name>
   <description>This plugin unpacks Web resources from JARs. It was originally part of the
@@ -19,7 +19,7 @@
     <connection>scm:git:git://github.com/sakaiproject/webjars-maven-plugin.get</connection>
     <developerConnection>scm:git:git@github.com:sakaiproject/webjars-maven-plugin.git</developerConnection>
     <url>https://github.com/sakaiproject/webjars-maven-plugin</url>
-    <tag>1.1</tag>
+    <tag>HEAD</tag>
   </scm>
   <developers>
     <developer>
