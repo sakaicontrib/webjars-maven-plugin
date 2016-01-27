@@ -16,9 +16,9 @@
     <maven.version>2.2.1</maven.version>
   </properties>
   <scm>
-    <connection>scm:git:git://github.com/sakaiproject/webjars-maven-plugin.get</connection>
-    <developerConnection>scm:git:git@github.com:sakaiproject/webjars-maven-plugin.git</developerConnection>
-    <url>https://github.com/sakaiproject/webjars-maven-plugin</url>
+    <connection>scm:git:git://github.com/sakaicontrib/webjars-maven-plugin.get</connection>
+    <developerConnection>scm:git:git@github.com:sakaicontrib/webjars-maven-plugin.git</developerConnection>
+    <url>https://github.com/sakaicontrib/webjars-maven-plugin</url>
     <tag>HEAD</tag>
   </scm>
   <developers>
